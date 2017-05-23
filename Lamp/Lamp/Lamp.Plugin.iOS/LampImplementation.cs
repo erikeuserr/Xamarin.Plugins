@@ -31,21 +31,24 @@ namespace Lamp.Plugin
                 return;
             }
 
-            NSError error = null;
-            captureDevice.LockForConfiguration(out error);
-            if (error != null)
+            if (captureDevice.IsTorchModeSupported)
             {
-                Debug.WriteLine(error);
-                captureDevice.UnlockForConfiguration();
-                return;
-            }
-            else
-            {
-                if (captureDevice.TorchMode != AVCaptureTorchMode.On)
+                NSError error = null;
+                captureDevice.LockForConfiguration(out error);
+                if (error != null)
                 {
-                    captureDevice.TorchMode = AVCaptureTorchMode.On;
+                    Debug.WriteLine(error);
+                    captureDevice.UnlockForConfiguration();
+                    return;
                 }
-                captureDevice.UnlockForConfiguration();
+                else
+                {
+                    if (captureDevice.TorchMode != AVCaptureTorchMode.On)
+                    {
+                        captureDevice.TorchMode = AVCaptureTorchMode.On;
+                    }
+                    captureDevice.UnlockForConfiguration();
+                }
             }
         }
 
